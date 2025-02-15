@@ -1,0 +1,23 @@
+version: "3.8"
+
+services:
+  oracledb:
+    image: container-registry.oracle.com/database/express:21.3.0-xe
+    volumes:
+      - ${FOLDER_WITH_IMPORT_FILE}:/db/data
+      - oracle_data_volume:/opt/oracle/
+    ports:
+      - "1521:1521"
+    environment:
+      - ORACLE_PWD=${ORACLE_PASSWORD}
+
+  admin:
+    build: ./admin
+    depends_on:
+      - oracledb
+    tty: true
+    volumes:
+      - ./config:/home/user/config
+
+volumes:
+  oracle_data_volume:

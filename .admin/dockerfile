@@ -1,0 +1,32 @@
+
+# Dockerfile para el contenedor de administración basado en Alpine
+FROM alpine:latest
+
+# Actualiza el sistema e instala las dependencias necesarias
+RUN apk update && apk add --no-cache \
+    bash \
+    git \
+    autoconf \
+    automake \
+    pkgconfig \
+    gcc \
+    musl-dev \
+    readline-dev \
+    make
+
+# (Opcional) Si flatpak está disponible y lo necesitas:
+# RUN apk add --no-cache flatpak
+
+# Clona, compila e instala rlwrap
+RUN git clone https://github.com/hanslub42/rlwrap.git && \
+    cd rlwrap && \
+    autoreconf --install && \
+    ./configure && \
+    make && \
+    make install && \
+    cd .. && rm -rf rlwrap
+
+# Agrega un alias para sqlplus (se añade al perfil global)
+RUN echo "alias sqlplus='rlwrap sqlplus'" >> /etc/profile
+
+CMD ["/bin/bash"]
