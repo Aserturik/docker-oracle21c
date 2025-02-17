@@ -7,7 +7,7 @@ services:
     ports:
       - 1521:1521
     environment:
-      - ORACLE_PWD=${ORACLE_PASSWORD}
+      - ORACLE_PWD=oracle
 
   admin:
     build: ./.admin/  # Carpeta donde está el Dockerfile de admin
