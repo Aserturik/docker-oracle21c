@@ -1,32 +1,26 @@
+# Utiliza Oracle Linux 8 como imagen base
+FROM oraclelinux:8
 
-# Dockerfile para el contenedor de administración basado en Alpine
-FROM alpine:latest
+# Instala las herramientas necesarias para compilar rlwrap
+RUN dnf install -y gcc make readline-devel \
+    && dnf install -y oracle-instantclient-release-el8 \
+    && dnf install -y oracle-instantclient-basic oracle-instantclient-sqlplus
 
-# Actualiza el sistema e instala las dependencias necesarias
-RUN apk update && apk add --no-cache \
-    bash \
-    git \
-    autoconf \
-    automake \
-    pkgconfig \
-    gcc \
-    musl-dev \
-    readline-dev \
-    make
+# Descarga, compila e instala rlwrap
+RUN curl -LO https://github.com/hanslub42/rlwrap/releases/download/v0.45.2/rlwrap-0.45.2.tar.gz \
+    && tar -xzf rlwrap-0.45.2.tar.gz \
+    && cd rlwrap-0.45.2 \
+    && ./configure \
+    && make \
+    && make install \
+    && cd .. \
+    && rm -rf rlwrap-0.45.2 rlwrap-0.45.2.tar.gz
 
-# (Opcional) Si flatpak está disponible y lo necesitas:
-# RUN apk add --no-cache flatpak
+# Añade un alias para sqlplus con rlwrap
+RUN echo "alias sqlplus='rlwrap sqlplus'" >> ~/.bashprofile
 
-# Clona, compila e instala rlwrap
-RUN git clone https://github.com/hanslub42/rlwrap.git && \
-    cd rlwrap && \
-    autoreconf --install && \
-    ./configure && \
-    make && \
-    make install && \
-    cd .. && rm -rf rlwrap
+# Establece el directorio de trabajo
+WORKDIR /root
 
-# Agrega un alias para sqlplus (se añade al perfil global)
-RUN echo "alias sqlplus='rlwrap sqlplus'" >> /etc/profile
-
+# Comando por defecto al iniciar el contenedor
 CMD ["/bin/bash"]
