@@ -1,4 +1,3 @@
-version: "3"
 services:
   oracledb:
     image: container-registry.oracle.com/database/express:21.3.0-xe
