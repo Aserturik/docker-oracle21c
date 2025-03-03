@@ -72,28 +72,26 @@ Entramos al contenedor
 docker exec -it oracle-21xe-oracledb-1 bash
 
 ```
- vamos a /home/oracle/db-sample-schemas-21.1/human_resources
+# ve a /home/oracle/db-sample-schemas-21.1/human_resources
 
 cd /home/oracle/db-sample-schemas-21.1/human_resources
 
-Ejecutamos el siguiente comando para cambiar las rutas de hr:
+# Ejecutamos el siguiente comando para cambiar las rutas de hr dentro del script de instalación:
 sed -i.bak "s#@__SUB__CWD__/human_resources#@$(pwd)#g" *.sql
 
-Nos conectamos como sys:
+# Nos conectamos como sys:
 sqlplus sys/oracle@XEPDB1 as sysdba
-
-#Dentro de sqlplus
-@hr_main.sql
 ```
 
-Y para instalar: 
+Instalación:
+
 @hr_main.sql
 
 specify password for HR as parameter 1:
 Enter value for 1: oracle
 
 specify default tablespeace for HR as parameter 2:
-Enter value for 2: users ==hr (hubiera sido mejor)==
+Enter value for 2: hr
 
 specify temporary tablespace for HR as parameter 3:
 Enter value for 3: temp
@@ -105,5 +103,7 @@ specify log path as parameter 5: Enter value for 5:
 ```
 $ORACLE_HOME/demo/schema/log
 ```
-specify connect string as parameter 6:
-Enter value for 6: localhost:1521/XEPDB
+specify connect string as parameter 6: Enter value for 6: 
+```
+localhost:1521/XEPDB
+```
