@@ -105,5 +105,5 @@ $ORACLE_HOME/demo/schema/log
 ```
 specify connect string as parameter 6: Enter value for 6: 
 ```
-localhost:1521/XEPDB
+localhost:1521/XEPDB1
 ```
